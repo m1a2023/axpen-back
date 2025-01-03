@@ -25,21 +25,25 @@ const UserController = {
     },
 
     createUser: async (req, res) => {
-        const { 
-            user_name, user_nickname, user_age, 
-            user_email, user_photo, user_goals
-        } = req.body;
-        
-        const data = { 
-            user_name, user_nickname, user_age, 
-            user_email, user_photo, user_goals
-        };
-
+        const { user_name, user_nickname, user_age, user_email, user_photo, user_goals } = req.body;
+    
+        if (!user_name || !user_nickname) {
+            return res.status(400).json({ message: "user_name and user_nickname are required" });
+        }
+    
         try {
-            const user = UserRepository.createUser(data);
-            res.status(200).json({ id: user.id });
+            const user = await UserRepository.createUser({
+                user_name,
+                user_nickname,
+                user_age,
+                user_email,
+                user_photo,
+                user_goals,
+            });
+            res.status(201).json({ id: user.user_id });
         } catch (e) {
-            res.status(500).json({ ErrorMessage: "Failed create user" });
+            console.error('Error inserting user: ', e);
+            res.status(500).json({ ErrorMessage: "Failed to create user" });
         }
     }
 };
