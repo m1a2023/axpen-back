@@ -11,7 +11,11 @@ const UserRepository = {
 
     createUser: async (user) => {
         return await UserModel.create(user);
-    }
+    }, 
+
+    updateUserById: async (user) => {
+        return await UserModel.updateById(user);
+    },
 };
 
 module.exports = UserRepository;
